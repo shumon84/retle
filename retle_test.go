@@ -1,4 +1,4 @@
-package expbackoff
+package retle
 
 import (
 	"context"
@@ -55,7 +55,7 @@ func TestExpTimer_Sleep(t *testing.T) {
 	endAt := time.Now()
 	actualElapsed := endAt.Sub(startAt)
 	expectedElapsed := durationTimer.NextDuration()
-	assertIsAvailableDuration(t,actualElapsed,expectedElapsed)
+	assertIsAvailableDuration(t, actualElapsed, expectedElapsed)
 }
 
 func TestExpTimer_Retry(t *testing.T) {
@@ -107,7 +107,7 @@ func TestExpTimer_Retry(t *testing.T) {
 					expectedElapsed += durationTimer.NextDuration()
 				}
 
-				assertIsAvailableDuration(t,actualElapsed,expectedElapsed)
+				assertIsAvailableDuration(t, actualElapsed, expectedElapsed)
 			},
 		},
 		{
@@ -210,7 +210,7 @@ func TestRetry(t *testing.T) {
 					expectedElapsed += durationTimer.NextDuration()
 				}
 
-				assertIsAvailableDuration(t,actualElapsed,expectedElapsed)
+				assertIsAvailableDuration(t, actualElapsed, expectedElapsed)
 			},
 		},
 		{
@@ -263,11 +263,11 @@ func TestRetry(t *testing.T) {
 	}
 }
 
-func assertIsAvailableDuration(t *testing.T,actualElapsed,expectedElapsed time.Duration){
+func assertIsAvailableDuration(t *testing.T, actualElapsed, expectedElapsed time.Duration) {
 	// 実測したスリープ時間と、期待されるスリープ時間の差が20msを超えている場合落とす
 	if actualElapsed < expectedElapsed || actualElapsed-expectedElapsed > 20*time.Millisecond {
 		t.Fatal("実測したスリープ時間と、期待されるスリープ時間の差が20msを超えています")
-	}else{
-		t.Log("(actual expected actual-expected) : (",actualElapsed.Round(time.Microsecond),expectedElapsed.Round(time.Microsecond),(actualElapsed - expectedElapsed).Round(time.Microsecond),")")
+	} else {
+		t.Log("(actual expected actual-expected) : (", actualElapsed.Round(time.Microsecond), expectedElapsed.Round(time.Microsecond), (actualElapsed - expectedElapsed).Round(time.Microsecond), ")")
 	}
 }
