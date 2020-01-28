@@ -6,8 +6,6 @@ import (
 	"reflect"
 	"testing"
 	"time"
-
-	"github.com/juroujin/CanopusAPI/canorus"
 )
 
 func TestNewExpTimer(t *testing.T) {
@@ -52,9 +50,9 @@ func TestExpTimer_Sleep(t *testing.T) {
 	sleepTimer := DefaultExpTimer()
 	durationTimer := DefaultExpTimer()
 
-	startAt := canorus.Now()
+	startAt := time.Now()
 	sleepTimer.Sleep()
-	endAt := canorus.Now()
+	endAt := time.Now()
 	actualElapsed := endAt.Sub(startAt)
 	expectedElapsed := durationTimer.NextDuration()
 	assertIsAvailableDuration(t,actualElapsed,expectedElapsed)
@@ -78,12 +76,12 @@ func TestExpTimer_Retry(t *testing.T) {
 
 				// リトライ回数の上限に達するまでリトライして、スリープ時間の合計を実測する
 				overHead := time.Duration(0)
-				startAt := canorus.Now()
+				startAt := time.Now()
 				err := expTimer.Retry(ctx, func() (bool, error) {
 					// スリープ以外の時間はオーバーヘッドになるので計測しておいて、あとで省く
-					startAt := canorus.Now()
+					startAt := time.Now()
 					defer func() {
-						endAt := canorus.Now()
+						endAt := time.Now()
 						overHead += endAt.Sub(startAt)
 					}()
 
@@ -95,7 +93,7 @@ func TestExpTimer_Retry(t *testing.T) {
 					return true, nil
 				})
 				// 終了時刻を取得して、スリープの経過時間を測る
-				endAt := canorus.Now()
+				endAt := time.Now()
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -181,12 +179,12 @@ func TestRetry(t *testing.T) {
 
 				// リトライ回数の上限に達するまでリトライして、スリープ時間の合計を実測する
 				overHead := time.Duration(0)
-				startAt := canorus.Now()
+				startAt := time.Now()
 				err := Retry(ctx, func() (bool, error) {
 					// スリープ以外の時間はオーバーヘッドになるので計測しておいて、あとで省く
-					startAt := canorus.Now()
+					startAt := time.Now()
 					defer func() {
-						endAt := canorus.Now()
+						endAt := time.Now()
 						overHead += endAt.Sub(startAt)
 					}()
 
@@ -198,7 +196,7 @@ func TestRetry(t *testing.T) {
 					return true, nil
 				})
 				// 終了時刻を取得して、スリープの経過時間を測る
-				endAt := canorus.Now()
+				endAt := time.Now()
 				if err != nil {
 					t.Fatal(err)
 				}
